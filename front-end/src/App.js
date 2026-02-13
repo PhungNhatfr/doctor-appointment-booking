@@ -10,6 +10,7 @@ import SignUp from './pages/SignUp';
 import LogIn from './pages/LogIn';
 import MyAppointment from './pages/MyAppointment';
 import NavBar from './components/NavBar';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -29,6 +30,8 @@ function App() {
         <Route path={"/login"} element={<LogIn />} />
         <Route path={"/myappointment"} element={<MyAppointment />} />
       </Routes>
+      
+      <Footer />
     
     </div>
   );
