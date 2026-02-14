@@ -13,7 +13,7 @@ const TopDoctors = () => {
     if (displayAll) {
       setDisplayDoctor(doctors.length);
     } else {
-        setDisplayDoctor(10)
+      setDisplayDoctor(10);
     }
   }, [displayAll]);
 
@@ -23,9 +23,10 @@ const TopDoctors = () => {
         title="Top Doctors to Book"
         content="Simply browse through our extensive list of trusted doctors."
       />
-      <div className="mt-10 flex flex-row gap-8 flex-wrap justify-between">
+      <div className="mt-10 w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
         {topDoctors.map((doctor) => (
           <DoctorItem
+            _id={doctor._id}
             name={doctor.name}
             image={doctor.image}
             speciality={doctor.speciality}
@@ -33,8 +34,15 @@ const TopDoctors = () => {
         ))}
       </div>
 
-      <div onClick={() => setDisplayAll(!displayAll)} className="flex justify-center items-center rounded-3xl bg-gray-200 w-36 h-10 mt-10 cursor-pointer hover:bg-gray-300 transition-all">
-              {  !displayAll ?  <p className="text-sm text-gray-600">more</p> : <p className="text-sm text-gray-600">less</p>}
+      <div
+        onClick={() => setDisplayAll(!displayAll)}
+        className="flex justify-center items-center rounded-3xl bg-gray-200 w-36 h-10 mt-10 cursor-pointer hover:bg-gray-300 transition-all"
+      >
+        {!displayAll ? (
+          <p className="text-sm text-gray-600">more</p>
+        ) : (
+          <p className="text-sm text-gray-600">less</p>
+        )}
       </div>
     </div>
   );

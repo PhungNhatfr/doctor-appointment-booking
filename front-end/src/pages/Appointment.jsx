@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { assets, doctors } from "../assets/assets_frontend/assets";
+import RelatedDoctor from "../components/RelatedDoctor";
 
 const Appointment = () => {
+  const { doctorId } = useParams();
+  
+  
   const dayOfTheWeek = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
   const timeOfTheDay = [
     "8.00",
@@ -32,38 +37,51 @@ const Appointment = () => {
   };
 
   const [arrayDays, setArrayDays] = useState(getSevenDays());
+  const [doctorData, setDoctorData] = useState(false);
+  
+  const fetchDoctorData = async () => {
+    doctors.map((doctor) => {
+      if (doctor._id === doctorId) {
+        setDoctorData(doctor)
+      }
+    })
+  }
+  
+  useEffect(() => {
+    fetchDoctorData()
+  },[doctorId, doctors])
 
-  return (
-    <div className="mt-10">
+  return doctorData ? (
+    <div className="mt-10 mb-20">
       <div className="grid grid-rows-2 grid-cols-4 h-[700px] gap-2">
         <div className="col-start-1 row-start-1 bg-[#5F6FFF] rounded-xl w-full aspect-[5/6] overflow-hidden">
-          <img className="w-full h-full object-cover" src={doctors[0].image} />
+          <img className="w-full h-full object-cover" src={doctorData.image} alt="doctor-image" />
         </div>
 
         <div className="col-start-2 col-end-5 row-start-1 border rounded-xl pt-8 px-6 flex flex-col justify-between gap-3 pb-10">
           <div className="flex flex-row items-center gap-2">
-            <p className="text-3xl font-bold ">{doctors[0].name}</p>
-            <img className="w-5" src={assets.verified_icon} />
+            <p className="text-3xl font-bold ">{doctorData.name}</p>
+            <img className="w-5" src={assets.verified_icon} alt="verified-icon" />
           </div>
 
           <div className="flex flex-row gap-2 items-center text-sm">
             <p>
-              {doctors[0].degree} - {doctors[0].speciality}
+              {doctorData.degree} - {doctorData.speciality}
             </p>
 
             <div className=" flex  border rounded-3xl border-gray-500 text-gray-500 text-sm w-20 h-8 items-center justify-center">
-              <p className="text-center">{doctors[0].experience}</p>
+              <p className="text-center">{doctorData.experience}</p>
             </div>
           </div>
 
           <div className="flex flex-row gap-2 items-center font-bold text-sm">
             <p>About</p>
-            <img src={assets.info_icon} />
+            <img src={assets.info_icon} alt="info-icon" />
           </div>
 
-          <p className="text-sm">{doctors[0].about}</p>
+          <p className="text-sm">{doctorData.about}</p>
 
-          <p>Appointment Fee: ${doctors[0].fees}</p>
+          <p>Appointment Fee: ${doctorData.fees}</p>
         </div>
 
         <div className="col-start-2 col-end-5 row-start-2 mt-5">
@@ -95,8 +113,10 @@ const Appointment = () => {
         </div>
       </div>
       
+      <RelatedDoctor />
+      
     </div>
-  );
+  ) : "";
 };
 
 export default Appointment;

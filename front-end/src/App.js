@@ -1,5 +1,5 @@
 import './App.css';
-import { Routes, Route } from 'react-router';
+import { Routes, Route } from 'react-router-dom'; 
 import Home from './pages/Home';
 import Appointment from './pages/Appointment';
 import Doctors from './pages/Doctors';
@@ -14,25 +14,27 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <div className="px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
-      
+    <div className="flex flex-col min-h-screen px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
       
       <NavBar />
+
       
-      <Routes>
-        <Route path={"/"} element={<Home />} />
-        <Route path={"/appointment"} element={<Appointment />} />
-        <Route path={"/doctors"} element={<Doctors />} />
-        <Route path={"/about"} element={<About />} />
-        <Route path={"/contact"} element={<Contact />} />
-        <Route path={"/profile"} element={<Profile />} />
-        <Route path={"/signup"} element={<SignUp />} />
-        <Route path={"/login"} element={<LogIn />} />
-        <Route path={"/myappointment"} element={<MyAppointment />} />
-      </Routes>
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/appointment/:doctorId" element={<Appointment />} /> 
+          <Route path="/doctors" element={<Doctors />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/login" element={<LogIn />} />
+          <Route path="/my-appointments" element={<MyAppointment />} />
+        </Routes>
+      </main>
       
       <Footer />
-    
+
     </div>
   );
 }
