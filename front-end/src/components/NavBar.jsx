@@ -55,7 +55,7 @@ const NavBar = () => {
           <div className="absolute hidden z-50 group-hover:block top-0 right-0 pr-20 pt-16 w-full">
             <div className="flex flex-col gap-3 border rounded-md w-40 px-3 py-5 bg-[#F8F8F8]">
               <p className=" cursor-pointer hover:text-black" onClick={() => navigate("/profile")}>My Profile</p>
-              <p className=" cursor-pointer hover:text-black" onClick={() => navigate("/my-appointment")}>My appointments</p>
+              <p className=" cursor-pointer hover:text-black" onClick={() => navigate("/my-appointments")}>My appointments</p>
               <p className=" cursor-pointer hover:text-black">Logout</p>
             </div>
           </div>
