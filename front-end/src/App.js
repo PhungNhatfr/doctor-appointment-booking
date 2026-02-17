@@ -19,10 +19,11 @@ function App() {
       <NavBar />
 
       
-      <main className="flex-grow">
+      <main className="flex-grow min-h-screen">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/appointment/:doctorId" element={<Appointment />} /> 
+          <Route path="/doctors/:specialityDoctor" element={<Doctors />} />
           <Route path="/doctors" element={<Doctors />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />

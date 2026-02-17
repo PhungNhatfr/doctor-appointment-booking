@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { doctors, specialityData } from "../assets/assets_frontend/assets";
 import DoctorItem from "../components/DoctorItem";
 
 const Doctors = () => {
-  const [specialityDoctor, setSpecialityDoctor] = useState("");
-
+  const { specialityDoctor } = useParams();
+  const navigate = useNavigate();
+  
   return (
-    <div className="mt-10 mb-20">
+    <div className="mt-10 mb-20 min-h-max">
       <p className="text-md">Browse through the doctors specialist.</p>
 
       <div className="flex flex-col sm:flex-row items-start gap-5 mt-5">
@@ -14,7 +16,7 @@ const Doctors = () => {
         <div className="flex flex-col gap-4 w-full h-12 sm:w-auto">
           {specialityData.map((speciality) => (
             <div
-              onClick={() => setSpecialityDoctor(speciality.speciality)}
+              onClick={() => navigate(`/doctors/${speciality.speciality}`)}
               className={`border rounded-lg border-gray-400 text-gray-600 text-xs w-full sm:w-48 hover:border-[#E2E5FF] hover:bg-[#E2E5FF] cursor-pointer ${
                 speciality.speciality === specialityDoctor
                   ? "bg-[#E2E5FF] border-[#E2E5FF]"
@@ -41,7 +43,7 @@ const Doctors = () => {
               );
             }
 
-            if (specialityDoctor === "") {
+            if (!specialityDoctor) {
               return (
                 <DoctorItem
                   _id={doctor._id}

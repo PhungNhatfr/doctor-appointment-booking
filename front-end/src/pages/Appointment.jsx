@@ -16,6 +16,8 @@ const Appointment = () => {
     "10.00",
     "10.30",
     "11.00",
+    "11.30",
+    "12.00"
   ];
 
   const getSevenDays = () => {
@@ -99,9 +101,9 @@ const Appointment = () => {
             ))}
           </div>
 
-          <div className="flex flex-row flex-wrap gap-2 mt-5">
+          <div className="flex flex-row overflow-x-auto scroll-smooth snap-x gap-2 mt-5 pb-3">
             {timeOfTheDay.map((time) => (
-              <div className="flex items-center justify-center text-gray-700 border w-28 h-12 rounded-full text-center  hover:bg-[#5F6FFF] hover:text-white cursor-pointer">
+              <div className="flex flex-shrink-0 items-center justify-center text-gray-700 border w-24 h-10 rounded-full text-center  hover:bg-[#5F6FFF] hover:text-white cursor-pointer snap-start">
                 <p>{time} am</p>
               </div>
             ))}
