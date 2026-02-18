@@ -109,7 +109,7 @@ const Appointment = () => {
             ))}
           </div>
           
-          <div className="border rounded-full bg-[#5F6FFF] w-64 h-14 flex justify-center items-center mt-5 text-white">
+          <div className="border rounded-full bg-[#5F6FFF] w-64 h-14 flex justify-center items-center mt-5 text-white cursor-pointer">
             <p>Book an appointment</p>
           </div>
         </div>
