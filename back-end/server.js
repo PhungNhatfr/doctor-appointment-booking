@@ -9,7 +9,7 @@ import informationRouter from "./routes/informationRoute.js";
 
 // Create Express and Http server
 const app = express()
-const port = process.env.PORT | 4000;
+const port = process.env.PORT || 4000;
 connectDB();
 connectCloundinary();
 
@@ -18,9 +18,9 @@ app.use(express.json());
 app.use(cors());
 
 // api endpoint
-app.use('api/user', userRouter);
-app.use('api/information', informationRouter);
-app.use('api/appoitment', appointmentRouter);
+app.use('/api/user', userRouter);
+app.use('/api/information', informationRouter);
+app.use('/api/appoitment', appointmentRouter);
 
 app.get('/', (req, res) => {
 
