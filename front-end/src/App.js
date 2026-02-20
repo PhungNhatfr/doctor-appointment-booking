@@ -11,12 +11,14 @@ import LogIn from './pages/LogIn';
 import MyAppointment from './pages/MyAppointment';
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
   return (
     <div className="flex flex-col min-h-screen px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
       
       <NavBar />
+      <ToastContainer />
 
       
       <main className="flex-grow min-h-screen">

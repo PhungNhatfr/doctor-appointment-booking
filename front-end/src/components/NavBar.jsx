@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets_frontend/assets";
+import { UserContext } from "../context/userContext";
 import Button from "./Button";
 
 const NavBar = () => {
-  const navigate = useNavigate();
-  const [access, setAccess] = useState(true);
+  const navigate = useNavigate(); 
+  const { token, setToken } = useContext(UserContext);
+  
+  const logout = () => {
+    localStorage.removeItem('token');
+    setToken('')
+    navigate('/login')
+  }
+  
 
   return (
     <div className="flex flex-row items-center justify-between text-sm py-4 border-b border-b-gray-400">
@@ -37,7 +45,7 @@ const NavBar = () => {
         </NavLink>
       </ul>
 
-      {access ? (
+      {token ? (
         <div className="group relative">
           <div className="flex flex-row gap-2 cursor-pointer">
             <img
@@ -56,13 +64,13 @@ const NavBar = () => {
             <div className="flex flex-col gap-3 border rounded-md w-40 px-3 py-5 bg-[#F8F8F8]">
               <p className=" cursor-pointer hover:text-black" onClick={() => navigate("/profile")}>My Profile</p>
               <p className=" cursor-pointer hover:text-black" onClick={() => navigate("/my-appointments")}>My appointments</p>
-              <p className=" cursor-pointer hover:text-black">Logout</p>
+              <p onClick={logout} className=" cursor-pointer hover:text-black">Logout</p>
             </div>
           </div>
         </div>
       ) : (
         <div>
-          <Button text="Create account" />
+          <button className="rounded-full bg-[#5F6FFF] cursor-pointer text-sm px-4 py-2 text-white " onClick={() => navigate('/login')} >Create account</button>
         </div>
       )}
     </div>

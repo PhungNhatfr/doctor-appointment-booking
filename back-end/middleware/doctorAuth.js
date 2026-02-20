@@ -1,7 +1,5 @@
 import jwt from "jsonwebtoken";
 
-
-
 const doctorAuth = async (req, res, next) => {
     const { token } = req.header;
 
