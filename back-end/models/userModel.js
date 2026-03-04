@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
     phone: { type: String },
     address: { type: String },
     gender: { type: String },
-    birthday: { type: Number },
+    birthday: { type: String, default: "" },
     cartAppointment: { type: Object, default: {} },
 })
 

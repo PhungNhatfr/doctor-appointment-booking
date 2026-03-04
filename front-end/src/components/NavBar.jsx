@@ -5,15 +5,14 @@ import { UserContext } from "../context/userContext";
 import Button from "./Button";
 
 const NavBar = () => {
-  const navigate = useNavigate(); 
-  const { token, setToken } = useContext(UserContext);
-  
+  const navigate = useNavigate();
+  const { token, setToken, userData } = useContext(UserContext);
+
   const logout = () => {
-    localStorage.removeItem('token');
-    setToken('')
-    navigate('/login')
-  }
-  
+    localStorage.removeItem("token");
+    setToken("");
+    navigate("/login");
+  };
 
   return (
     <div className="flex flex-row items-center justify-between text-sm py-4 border-b border-b-gray-400">
@@ -49,9 +48,9 @@ const NavBar = () => {
         <div className="group relative">
           <div className="flex flex-row gap-2 cursor-pointer">
             <img
-              src={assets.profile_pic}
-              alt="profile-pic"
-              className="rounded-full w-10"
+              src={userData.avatar ? userData.avatar : assets.upload_area}
+              alt="user data"
+              className="w-10 h-10 rounded-full"
             />
             <img
               src={assets.dropdown_icon}
@@ -62,15 +61,32 @@ const NavBar = () => {
 
           <div className="absolute hidden z-50 group-hover:block top-0 right-0 pr-20 pt-16 w-full">
             <div className="flex flex-col gap-3 border rounded-md w-40 px-3 py-5 bg-[#F8F8F8]">
-              <p className=" cursor-pointer hover:text-black" onClick={() => navigate("/profile")}>My Profile</p>
-              <p className=" cursor-pointer hover:text-black" onClick={() => navigate("/my-appointments")}>My appointments</p>
-              <p onClick={logout} className=" cursor-pointer hover:text-black">Logout</p>
+              <p
+                className=" cursor-pointer hover:text-black"
+                onClick={() => navigate("/profile")}
+              >
+                My Profile
+              </p>
+              <p
+                className=" cursor-pointer hover:text-black"
+                onClick={() => navigate("/my-appointments")}
+              >
+                My appointments
+              </p>
+              <p onClick={logout} className=" cursor-pointer hover:text-black">
+                Logout
+              </p>
             </div>
           </div>
         </div>
       ) : (
         <div>
-          <button className="rounded-full bg-[#5F6FFF] cursor-pointer text-sm px-4 py-2 text-white " onClick={() => navigate('/login')} >Create account</button>
+          <button
+            className="rounded-full bg-[#5F6FFF] cursor-pointer text-sm px-4 py-2 text-white "
+            onClick={() => navigate("/login")}
+          >
+            Create account
+          </button>
         </div>
       )}
     </div>
