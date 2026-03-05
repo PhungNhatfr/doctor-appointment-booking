@@ -36,7 +36,7 @@ function App() {
 
       <div className='flex flex-row w-full'>
         {isAuthenticated && <Sidebar className="w-full" />}
-        <main className="flex-grow min-h-screen">
+        <main className="flex-grow min-h-screen bg-[#F2F3FF]">
           <Routes>
             {/* 1. Nếu CHƯA ĐĂNG NHẬP */}
             {!isAuthenticated && (
