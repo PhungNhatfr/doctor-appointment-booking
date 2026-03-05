@@ -1,9 +1,17 @@
-import React from "react";
-import { assets } from "../../assets_admin/assets";
+import React, { useState } from "react";
+import { assets, timeSlots } from "../../assets_admin/assets";
 
 const AddDoctor = () => {
+  const [timeSelected, setTimeSelected] = useState([]);
+
+  const toggleSlot = (time) => {
+    setTimeSelected((prev) =>
+      prev.includes(time) ? prev.filter((s) => s !== time) : [...prev, time]
+    );
+  };
+
   return (
-    <div className="flex flex-col gap-2 px-5 py-5">
+    <div className=" w-full flex flex-col gap-2 px-5 py-5">
       <p className="text-md">Add Doctor</p>
 
       <form className="border border-gray-400 bg-white rounded-md w-3/4 h-full px-5 py-5 flex flex-col gap-3">
@@ -112,7 +120,28 @@ const AddDoctor = () => {
             className=" text-sm px-3 py-2 border border-gray-300 rounded-md h-32"
           />
         </div>
-        
+
+        <div className="flex flex-col gap-2 text-sm">
+          <p>Schedule</p>
+
+          <div className="flex flex-wrap gap-5 justify-center">
+            {timeSlots.map((timeSlot) => (
+              <button
+                type="button"
+                onClick={() => toggleSlot(timeSlot)}
+                className={`rounded-full w-fit px-4 py-2  cursor-pointer text-sm mt-3
+${
+  timeSelected.includes(timeSlot)
+    ? "bg-[#3945e3] text-[#969ff1]"
+    : "bg-[#a2abf9] text-white hover:text-[#eaecff] hover:bg-[#3945e3]"
+}`}
+              >
+                {timeSlot}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <button className="rounded-full w-fit px-10 py-2 bg-[#5F6FFF] text-white hover:text-[#5F6FFF] hover:bg-white cursor-pointer text-sm mt-3">
           Add Doctor
         </button>
