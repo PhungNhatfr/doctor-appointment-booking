@@ -1,6 +1,7 @@
 
 
 const addAppointment = async (req, res) => {
+    
 
 }
 

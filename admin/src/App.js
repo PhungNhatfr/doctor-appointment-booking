@@ -29,13 +29,13 @@ function App() {
   
   
   return (
-    <div className="flex flex-col min-h-screen px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]">
+    <div className="flex flex-col min-h-screen">
       <ToastContainer />
 
       {isAuthenticated && <NavBar />}
 
       <div className='flex flex-row w-full'>
-        {isAuthenticated && <Sidebar className="w-38" />}
+        {isAuthenticated && <Sidebar className="w-full" />}
         <main className="flex-grow min-h-screen">
           <Routes>
             {/* 1. Nếu CHƯA ĐĂNG NHẬP */}
