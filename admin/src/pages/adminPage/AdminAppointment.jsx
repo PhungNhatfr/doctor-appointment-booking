@@ -30,13 +30,13 @@ const AllAppointments = () => {
             </tr>
           </thead>
 
-          {/* Corps du tableau */}
+          
           <tbody className='text-gray-600 divide-y'>
             {appointments.map((item, index) => (
               <tr key={index} className='hover:bg-gray-50 transition-colors'>
                 <td className='px-6 py-4'>{index + 1}</td>
                 
-                {/* Cellule Patient */}
+               
                 <td className='px-6 py-4'>
                   <div className='flex items-center gap-2'>
                     <img className='w-8 h-8 rounded-full object-cover' src={assets.upload_area} alt="" />
@@ -48,7 +48,7 @@ const AllAppointments = () => {
                 <td className='px-6 py-4'>{item.age}</td>
                 <td className='px-6 py-4 whitespace-nowrap'>{item.dateTime}</td>
 
-                {/* Cellule Docteur */}
+               
                 <td className='px-6 py-4'>
                   <div className='flex items-center gap-2'>
                     <img className='w-8 h-8 rounded-full bg-gray-100 object-cover' src={assets.doctor_img} alt="" />
@@ -58,7 +58,7 @@ const AllAppointments = () => {
 
                 <td className='px-6 py-4 font-medium text-gray-800'>{item.fees}</td>
 
-                {/* Bouton d'action */}
+               
                 <td className='px-6 py-4 text-center'>
                   <div className='flex justify-center'>
                     <img 
