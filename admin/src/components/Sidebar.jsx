@@ -10,7 +10,7 @@ const Sidebar = () => {
   const { tokenDoctor } = useContext(DoctorContext);
 
   return (
-    <div className="min-h-screen bg-white border-r border-gray-400 flex flex-col w-24 md:w-56 py-5">
+    <div className="min-h-screen bg-white border-r border-gray-400 flex flex-col w-24 md:w-1/6 py-5">
       {/* For admin */}
       {tokenAdmin && (
         <>
