@@ -73,6 +73,10 @@ const getUser = async (req, res) => {
 
 const addDoctor = async (req, res) => {
 
+    const { name, email, password, speciality, education, address1, address2, experience, fees, about_me, schedule } = req.body;
+    const image = req.file;
+    
+    
 }
 
 const deleteDoctor = async (req, res) => {

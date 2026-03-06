@@ -261,4 +261,6 @@ export const timeSlots = [
   "01:00 PM", "02:00 PM", "03:00 PM", "04:00 PM", "05:00 PM"
 ];
 
+export const daysOfTheWeeks = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
 

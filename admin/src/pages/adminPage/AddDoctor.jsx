@@ -1,13 +1,26 @@
 import React, { useState } from "react";
-import { assets, timeSlots } from "../../assets_admin/assets";
+import { assets, timeSlots, daysOfTheWeeks } from "../../assets_admin/assets";
 
 const AddDoctor = () => {
-  const [timeSelected, setTimeSelected] = useState([]);
+  const [scheduleSelected, setScheduleSelected] = useState({
+    Mon: [],
+    Tue: [],
+    Wed: [],
+    Thu: [],
+    Fri: [],
+    Sat: [],
+    Sun: [],
+  });
 
-  const toggleSlot = (time) => {
-    setTimeSelected((prev) =>
-      prev.includes(time) ? prev.filter((s) => s !== time) : [...prev, time]
-    );
+  const [activeDay, setActiveDay] = useState("Mon");
+
+  const toggleSlot = (slot) => {
+    setScheduleSelected((prev) => ({
+      ...prev,
+      [activeDay]: prev[activeDay].includes(slot)
+        ? prev[activeDay].filter((s) => s !== slot)
+        : [...prev[activeDay], slot],
+    }));
   };
 
   return (
@@ -123,7 +136,22 @@ const AddDoctor = () => {
 
         <div className="flex flex-col gap-2 text-sm">
           <p>Schedule</p>
-
+          
+          {/* Line 1: Day */}
+          <div className="flex flex-row justify-between gap-3 px-3">
+            {daysOfTheWeeks.map((day) => (
+              <button
+                onClick={() => setActiveDay(day)}
+                type="button"
+                className={`text-gray-800 text-sm font-bold px-5 py-3 cursor-pointer rounded-full ${
+                  activeDay === day ? "bg-blue-500 text-white" : ""
+                } `}
+              >
+                {day}
+              </button>
+            ))}
+          </div>
+          {/* Line 2: Time */}
           <div className="flex flex-wrap gap-5 justify-center">
             {timeSlots.map((timeSlot) => (
               <button
@@ -131,8 +159,8 @@ const AddDoctor = () => {
                 onClick={() => toggleSlot(timeSlot)}
                 className={`rounded-full w-fit px-4 py-2  cursor-pointer text-sm mt-3
 ${
-  timeSelected.includes(timeSlot)
-    ? "bg-[#3945e3] text-[#969ff1]"
+  scheduleSelected[activeDay].includes(timeSlot)
+    ? "bg-[#3945e3] text-white"
     : "bg-[#a2abf9] text-white hover:text-[#eaecff] hover:bg-[#3945e3]"
 }`}
               >
