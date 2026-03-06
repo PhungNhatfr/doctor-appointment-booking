@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import validator from 'validator';
 import doctorModel from '../models/doctorModel.js';
 
-const createToken = (id) => {
+export const createToken = (id) => {
     return jwt.sign({ id }, process.env.JWT_SECRET)
 }
 

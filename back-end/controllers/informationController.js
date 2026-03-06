@@ -1,5 +1,8 @@
 import { v2 as cloudinary } from 'cloudinary';
 import userModel from '../models/userModel.js';
+import doctorModel from '../models/doctorModel.js';
+import bcrypt from 'bcrypt';
+import validator from 'validator';
 
 
 const updateUser = async (req, res) => {
@@ -26,17 +29,17 @@ const updateUser = async (req, res) => {
 
         await userModel.findByIdAndUpdate(userId, updateData);
 
-        
-        
+
+
         res.json({
             success: true,
             message: "Update successfully!"
         })
 
     } catch (error) {
-        
+
         console.log(error)
-        
+
         res.json({
             success: false,
             message: error.message
@@ -48,35 +51,102 @@ const updateUser = async (req, res) => {
 }
 
 const getUser = async (req, res) => {
-    
+
     try {
-        
+
         const { userId } = req.body;
-        
+
         const userData = await userModel.findById(userId);
-        
+
         res.json({
             success: true,
             userData: userData
         })
-        
+
     } catch (error) {
         console.log(error.message);
         res.json({
             success: false,
             message: error.message
         })
-        
+
     }
 
 }
 
 const addDoctor = async (req, res) => {
 
-    const { name, email, password, speciality, education, address1, address2, experience, fees, about_me, schedule } = req.body;
-    const image = req.file;
-    
-    
+    try {
+
+        const { name, email, password, speciality, education, address1, address2, experience, fees, about_me, schedule } = req.body;
+        const image = req.file;
+
+        const emailExisted = await doctorModel.findOne({ email });
+
+        if (emailExisted) {
+            res.status(400).json({
+                success: false,
+                message: "Email existed !"
+            })
+        }
+
+        // Valid email and password
+        if (!validator.isEmail(email)) {
+            return res.status(400).json({
+                success: false,
+                message: "Please enter a valid email"
+            })
+        }
+
+        if (password.length < 8) {
+            return res.status(400).json({
+                success: false,
+                message: "Please enter a string password"
+            })
+        }
+
+        // hash password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+
+        if (image) {
+            const result = await cloudinary.uploader.upload(image.path, { resource_type: 'image' });
+            const imgUrl = result.secure_url;
+        }
+
+        const doctorData = {
+            name,
+            email,
+            password: hashedPassword,
+            speciality,
+            education,
+            address1,
+            address2,
+            experience,
+            fees,
+            about_me,
+            schedule,
+        }
+
+        const newDoctor = new doctorModel(doctorData);
+
+        const doctor = await newDoctor.save()
+
+        res.json({
+            success: true,
+            message: "Add Doctor Successfully"
+        })
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            success: false,
+            message: error.message
+        })
+    }
+
 }
 
 const deleteDoctor = async (req, res) => {
