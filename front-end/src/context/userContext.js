@@ -34,6 +34,7 @@ const UserContextProvider = (props) => {
     useEffect(() => {
         if (token) {
             getUserData(token)
+            
         }
     }, [token])
 

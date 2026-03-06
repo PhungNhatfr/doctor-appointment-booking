@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 const doctorAuth = async (req, res, next) => {
-    const { token } = req.header;
+    const { token } = req.headers;
 
     if (!token) {
         return res.status(409).json({
@@ -13,7 +13,7 @@ const doctorAuth = async (req, res, next) => {
     try {
         
         const token_decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.body.userId = token_decoded.id;
+        req.body.doctorId = token_decoded.id;
         next()
 
     } catch (error) {

@@ -8,7 +8,7 @@ const DoctorAppointments = () => {
   ]
 
   return (
-    <div className='w-full max-w-6xl m-5'>
+    <div className='w-full md:w-3/4 max-w-6xl m-5'>
       <p className='mb-3 text-md font-medium'>All Appointments</p>
 
      

@@ -154,7 +154,25 @@ const deleteDoctor = async (req, res) => {
 }
 
 const getDoctor = async (req, res) => {
-
+    try {
+        
+        const { doctorId } = req.body;
+        
+        const dataDoctor = await doctorModel.findById(doctorId);
+        
+        res.json({
+            success: true,
+            dataDoctor
+        })
+        
+    } catch (error) {
+        console.log("Error at function getDoctor: ", error)
+        res.status(500).json({
+            success: false,
+            message: error.message
+        })
+        
+    }
 }
 
 const updateDoctor = async (req, res) => {

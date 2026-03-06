@@ -49,7 +49,7 @@ const Login = () => {
         if (response.data.success) {
           setTokenDoctor(response.data.token);
           toast.success("Login successfully!", { autoClose: 1000 });
-          localStorage.setItem("doctorToken", response.data.token);
+          localStorage.setItem("tokenDoctor", response.data.token);
           navigate('/doctor-dashboard')
         } else {
           toast.error(response.data.message, { autoClose: 1000 });
