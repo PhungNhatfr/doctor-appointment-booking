@@ -8,6 +8,7 @@ const informationRouter = express.Router();
 
 informationRouter.post('/update-user', upload.single('avatar'), userAuth,   updateUser);
 informationRouter.post('/get-user', userAuth, getUser);
+
 informationRouter.post('/add-doctor', upload.single('image'), adminAuth, addDoctor);
 
 

@@ -1,4 +1,4 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 
 
@@ -10,6 +10,12 @@ const AdminContextProvider = (props) => {
   const navigate = useNavigate();
 
   const [tokenAdmin, setTokenAdmin] = useState("");
+  
+  useEffect(() => {
+    if (localStorage.getItem("tokenAdmin")) {
+      setTokenAdmin(localStorage.getItem("tokenAdmin"));
+    }
+  }, [tokenAdmin])
   
 
   const value = {
