@@ -150,32 +150,100 @@ const addDoctor = async (req, res) => {
 }
 
 const deleteDoctor = async (req, res) => {
+    
+    try {
+        
+        const { doctorId } = req.body;
+        
+        const doctorExisted = await doctorModel.findById(doctorId);
+        
+        if (!doctorExisted) {
+            return res.json({
+                success: false,
+                message: "Can't delete this doctor"
+            })
+        }
+        
+        await doctorModel.findByIdAndDelete(doctorId);
+        
+        res.json({
+            success: true,
+            message: "Doctor is deleted"
+        })
+        
+    } catch (error) {
+        console.log("Error at deleteDoctor: ", error);
+        res.json({
+            success: false,
+            message: error.message
+        })
+    }
 
 }
 
 const getDoctor = async (req, res) => {
     try {
-        
+
         const { doctorId } = req.body;
-        
+
         const dataDoctor = await doctorModel.findById(doctorId);
-        
+
         res.json({
             success: true,
             dataDoctor
         })
-        
+
     } catch (error) {
         console.log("Error at function getDoctor: ", error)
         res.status(500).json({
             success: false,
             message: error.message
         })
-        
+
     }
 }
 
 const updateDoctor = async (req, res) => {
+
+    try {
+
+        const { doctorId, name, speciality, education, address1, address2, experience, fees, about_me, schedule } = req.body;
+
+        const image = req.file;
+
+        const updateData = {};
+
+        if (name) updateData.name = name;
+        if (speciality) updateData.speciality = speciality;
+        if (education) updateData.education = education;
+        if (address1) updateData.address1 = address1;
+        if (address2) updateData.address2 = address2;
+        if (experience) updateData.experience = experience;
+        if (fees) updateData.fees = fees;
+        if (about_me) updateData.about_me = about_me;
+        if (schedule) updateData.schedule = schedule;
+
+
+        if (image) {
+            const result = (await cloudinary.uploader.upload(image.path, { resource_type: 'image' }));
+            const imgUrl = result.secure_url;
+            await doctorModel.findByIdAndUpdate(doctorId, { image: imgUrl });
+        }
+
+        await doctorModel.findByIdAndUpdate(doctorId, updateData)
+
+        res.json({
+            success: true,
+            message: "Update Successfully"
+        })
+
+    } catch (error) {
+        console.log("Error at updateDoctor: ", error);
+        res.json({
+            success: false,
+            message: error.message
+        })
+    }
 
 }
 

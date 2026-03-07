@@ -1,5 +1,5 @@
 import express from 'express';
-import { getUser, updateUser, addDoctor, getDoctor } from '../controllers/informationController.js';
+import { getUser, updateUser, addDoctor, getDoctor, updateDoctor, deleteDoctor } from '../controllers/informationController.js';
 import upload from '../middleware/multer.js';
 import userAuth from '../middleware/userAuth.js';
 import adminAuth from '../middleware/adminAuth.js';
@@ -11,8 +11,11 @@ informationRouter.post('/update-user', upload.single('avatar'), userAuth,   upda
 informationRouter.post('/get-user', userAuth, getUser);
 
 informationRouter.post('/add-doctor', upload.single('image'), adminAuth, addDoctor);
+informationRouter.post('/delete-doctor', adminAuth, deleteDoctor);
 
 informationRouter.post('/get-doctor', doctorAuth, getDoctor);
+informationRouter.post('/update-doctor', doctorAuth, updateDoctor);
+
 
 
 export default informationRouter;
