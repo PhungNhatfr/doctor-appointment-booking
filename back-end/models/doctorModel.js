@@ -10,7 +10,7 @@ const doctorSchema = new mongoose.Schema({
     address1: { type: String, required: true },
     address2: { type: String, required: true },
     experience: { type: String, required: true },
-    fees: { type: String, required: true },
+    fees: { type: Number, required: true },
     about_me: { type: String, required: true },
     schedule: { type: Object, default: {} },
 })

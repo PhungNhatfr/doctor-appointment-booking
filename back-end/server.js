@@ -20,7 +20,7 @@ app.use(cors());
 // api endpoint
 app.use('/api/user', userRouter);
 app.use('/api/information', informationRouter);
-app.use('/api/appoitment', appointmentRouter);
+app.use('/api/appointment', appointmentRouter);
 
 app.get('/', (req, res) => {
 
