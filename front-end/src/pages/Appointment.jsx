@@ -85,7 +85,9 @@ const Appointment = () => {
 
           <p>Appointment Fee: ${doctorData.fees}</p>
         </div>
-
+        
+        {/* ---------------------------Booking slot-------------------------------- */}
+        
         <div className="col-start-2 col-end-5 row-start-2 mt-5">
           <p>Booking slots</p>
 

@@ -7,10 +7,9 @@ import appointmentModel from '../models/appointmentModel.js';
 const addAppointment = async (req, res) => {
 
     try {
-        
+
         const { userId, doctorId, splotDate, splotTime } = req.body;
-        
-        
+
 
         const userExisted = await userModel.findById(userId);
         if (!userExisted) {
@@ -35,6 +34,8 @@ const addAppointment = async (req, res) => {
             })
         }
         
+        
+
         const fees = doctorExisted.fees;
 
         const appointmentData = {
@@ -47,7 +48,37 @@ const addAppointment = async (req, res) => {
             fees,
             date: Date.now()
         }
-
+        
+        // Update splotDate and splotTime in doctorExisted
+        let schedule_booked = doctorExisted.schedule_booked;
+        
+        if (schedule_booked[splotDate]) {
+            schedule_booked[splotDate].push(splotTime)
+        } else {
+            schedule_booked[splotDate] = [splotTime]
+            
+        }
+        
+        await doctorModel.findByIdAndUpdate(doctorId, { schedule_booked })
+        
+        // Update splotDate and splotTime in userExisted
+        let cartAppointment = userExisted.cartAppointment;
+        
+        if (cartAppointment[doctorId]) {
+            if (cartAppointment[doctorId][splotDate]) {
+                cartAppointment[doctorId][splotDate].push(splotTime)
+            } else {
+                cartAppointment[doctorId][splotDate] = [splotTime]
+            }
+        } else {
+            cartAppointment[doctorId] = {
+                [splotDate]: [splotTime]
+            }
+        }
+        
+        await userModel.findByIdAndUpdate(userId, {cartAppointment})
+        
+        // Create appointment in db
         const newAppointment = new appointmentModel(appointmentData);
         const appointment = await newAppointment.save();
 
@@ -57,7 +88,7 @@ const addAppointment = async (req, res) => {
         })
 
     } catch (error) {
-        
+
         console.log('Error at addAppointment: ', error);
         res.json({
             success: false,
@@ -69,17 +100,17 @@ const addAppointment = async (req, res) => {
 }
 
 const getAllAppointments = async (req, res) => {
-    
+
     try {
-        
+
         const appointments = await appointmentModel.find({}).sort({ date: -1 });
-        
+
         res.json({
             success: true,
             appointments
         })
-        
-        
+
+
     } catch (error) {
         console.log("Error at getAllAppointments: ", error);
         res.json({
@@ -92,15 +123,118 @@ const getAllAppointments = async (req, res) => {
 
 const updateAppointment = async (req, res) => {
 
-}
-
-const cancelAppointment = async (req, res) => {
 
 }
+
+const processCancellation = async (appointmentId, res) => {
+
+        const appointment = await appointmentModel.findById(appointmentId);
+
+        if (!appointment) {
+            return res.status(404).json({
+                success: false,
+                message: "Can't cancel this appointment"
+            })
+        }
+
+        await appointmentModel.findByIdAndUpdate(appointmentId, { cancelled: true });
+
+        // Remove date appointment in doctorData
+
+        const { splotDate, splotTime, doctorId } = appointment;
+
+        const doctorData = await doctorModel.findById(doctorId);
+        let schedule_booked = doctorData.schedule_booked;
+        if (schedule_booked[splotDate]) {
+                schedule_booked[splotDate] = schedule_booked[splotDate].filter((time) => time !== splotTime);
+
+                doctorData.markModified('schedule_booked');
+                await doctorData.save();
+            }
+
+        await doctorModel.findByIdAndUpdate(doctorId, { schedule_booked });
+
+        res.json({
+            success: true,
+            message: "Cancel Appointment Successfully"
+        })
+
+    
+
+}
+
+const cancelAppointmentAdmin = async (req, res) => {
+    try {
+        const { appointmentId } = req.body;
+        
+        await processCancellation(appointmentId, res);
+        
+    } catch (error) {
+        console.log("Error at cancelAppointmentAdmin: ", error);
+        res.json({
+            success: false,
+            message: error.message
+        })
+        
+    }
+}
+
+const cancelAppointmentUser = async (req, res) => {
+    try {
+        const { appointmentId, userId } = req.body;
+        
+        const appointment = await appointmentModel.findById(appointmentId);
+        
+        if (appointment.userId !== userId) {
+            return res.status(404).json({
+                success: false,
+                message: "User Invalid"
+            })
+        }
+        
+        await processCancellation(appointmentId, res);
+        
+    } catch (error) {
+        console.log("Error at cancelAppointmentUser: ", error);
+        res.json({
+            success: false,
+            message: error.message
+        })
+        
+    }
+}
+
+const cancelAppointmentDoctor = async (req, res) => {
+    try {
+        const { appointmentId, doctorId } = req.body;
+        
+        const appointment = await appointmentModel.findById(appointmentId);
+        
+        if (appointment.doctorId !== doctorId) {
+            return res.status(404).json({
+                success: false,
+                message: "User Invalid"
+            })
+        }
+        
+        await processCancellation(appointmentId, res);
+        
+    } catch (error) {
+        console.log("Error at cancelAppointmentDoctor: ", error);
+        res.json({
+            success: false,
+            message: error.message
+        })
+        
+    }
+}
+
+
+
 
 const deleteAppointmentAuto = async (req, res) => {
 
 }
 
-export { addAppointment, getAllAppointments, updateAppointment, cancelAppointment, deleteAppointmentAuto }
+export { addAppointment, getAllAppointments, updateAppointment, processCancellation,cancelAppointmentAdmin, cancelAppointmentUser, cancelAppointmentDoctor, deleteAppointmentAuto }
 
