@@ -110,9 +110,12 @@ const addDoctor = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
 
+
+        let imgUrl = "";
         if (image) {
             const result = await cloudinary.uploader.upload(image.path, { resource_type: 'image' });
-            const imgUrl = result.secure_url;
+            imgUrl = result.secure_url;
+
         }
 
         const doctorData = {
@@ -127,6 +130,7 @@ const addDoctor = async (req, res) => {
             fees,
             about_me,
             schedule,
+            image: imgUrl
         }
 
         const newDoctor = new doctorModel(doctorData);
@@ -150,27 +154,27 @@ const addDoctor = async (req, res) => {
 }
 
 const deleteDoctor = async (req, res) => {
-    
+
     try {
-        
+
         const { doctorId } = req.body;
-        
+
         const doctorExisted = await doctorModel.findById(doctorId);
-        
+
         if (!doctorExisted) {
             return res.json({
                 success: false,
                 message: "Can't delete this doctor"
             })
         }
-        
+
         await doctorModel.findByIdAndDelete(doctorId);
-        
+
         res.json({
             success: true,
             message: "Doctor is deleted"
         })
-        
+
     } catch (error) {
         console.log("Error at deleteDoctor: ", error);
         res.json({
@@ -201,6 +205,53 @@ const getDoctor = async (req, res) => {
         })
 
     }
+}
+
+const listDoctor = async (req, res) => {
+
+    try {
+
+        const doctors = await doctorModel.find({}).select(['-password', '-email']);
+
+        res.json({
+            success: true,
+            doctors
+        })
+
+    } catch (error) {
+        console.log("Error at listDoctor: ", listDoctor);
+        res.json({
+            success: false,
+            message: error.message
+        })
+    }
+
+}
+
+const singleDoctor = async (req, res) => {
+
+    try {
+        
+        const { doctorId } = req.body;
+        
+        const doctor = await doctorModel.findById(doctorId).select('-password');
+        
+        res.json({
+            success: true,
+            doctor
+        })
+        
+        
+    } catch (error) {
+        
+        console.log("Error at singleDoctor: ", listDoctor);
+        res.json({
+            success: false,
+            message: error.message
+        })
+        
+    }
+
 }
 
 const updateDoctor = async (req, res) => {
@@ -247,5 +298,14 @@ const updateDoctor = async (req, res) => {
 
 }
 
-export { updateUser, getUser, addDoctor, deleteDoctor, getDoctor, updateDoctor }
+export {
+    updateUser,
+    getUser,
+    addDoctor,
+    deleteDoctor,
+    getDoctor,
+    updateDoctor,
+    listDoctor, 
+    singleDoctor
+}
 

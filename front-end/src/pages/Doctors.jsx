@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { doctors, specialityData } from "../assets/assets_frontend/assets";
+import {assets, specialityData } from "../assets/assets_frontend/assets";
 import DoctorItem from "../components/DoctorItem";
+import { UserContext } from "../context/userContext";
 
 const Doctors = () => {
+  
+  const { doctors } = useContext(UserContext);
+  
   const { specialityDoctor } = useParams();
   const navigate = useNavigate();
   
@@ -38,7 +42,7 @@ const Doctors = () => {
                   _id={doctor._id}
                   name={doctor.name}
                   speciality={doctor.speciality}
-                  image={doctor.image}
+                  image={doctor.image ? doctor.image : assets.upload_area}
                 />
               );
             }
@@ -49,7 +53,7 @@ const Doctors = () => {
                   _id={doctor._id}
                   name={doctor.name}
                   speciality={doctor.speciality}
-                  image={doctor.image}
+                  image={doctor.image ? doctor.image : assets.upload_area}
                 />
               );
             }

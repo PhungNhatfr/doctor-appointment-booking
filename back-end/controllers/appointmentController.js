@@ -121,6 +121,87 @@ const getAllAppointments = async (req, res) => {
 
 }
 
+const getUserAppointments = async (req, res) => {
+
+    try {
+
+        const { userId } = req.body;
+
+        const ThreeDayInMs = 3 * 24 * 60 * 60 * 1000;
+        const currentDay = Date.now()
+
+        const appointments = await appointmentModel.find({
+            userId: userId,
+            $or: [
+                { cancelled: false },
+                { cancelledAt: currentDay - ThreeDayInMs }
+            ]
+        })
+
+        if (!appointments) {
+            return res.status(404).json({
+                success: false,
+                message: "Can't find any appointment!"
+            })
+        }
+
+        res.json({
+            success: true,
+            appointments
+        })
+
+    } catch (error) {
+
+        console.log("Error at getUserAppointments: ", error.message);
+        res.status(400).json({
+            success: false,
+            message: error.message
+        })
+
+    }
+}
+
+const getDoctorAppointments = async (req, res) => {
+
+    try {
+
+        const { doctorId } = req.body;
+
+        const ThreeDayInMs = 3 * 24 * 60 * 60 * 1000;
+        const currentDay = Date.now()
+
+        const appointments = await appointmentModel.find({
+            doctorId: doctorId,
+            $or: [
+                { cancelled: false },
+                { cancelledAt: currentDay - ThreeDayInMs }
+            ]
+        })
+
+        if (!appointments) {
+            return res.status(404).json({
+                success: false,
+                message: "Can't find any appointment!"
+            })
+        }
+
+        res.json({
+            success: true,
+            appointments
+        })
+
+    } catch (error) {
+
+        console.log("Error at getDoctorAppointments: ", error.message);
+        res.status(400).json({
+            success: false,
+            message: error.message
+        })
+
+    }
+
+}
+
 const updateAppointment = async (req, res) => {
 
 
@@ -226,89 +307,6 @@ const cancelAppointmentDoctor = async (req, res) => {
 
     }
 }
-
-const getUserAppointments = async (req, res) => {
-
-    try {
-
-        const { userId } = req.body;
-
-        const ThreeDayInMs = 3 * 24 * 60 * 60 * 1000;
-        const currentDay = Date.now()
-
-        const appointments = await appointmentModel.find({
-            userId: userId,
-            $or: [
-                { cancelled: false },
-                { cancelledAt: currentDay - ThreeDayInMs }
-            ]
-        })
-
-        if (!appointments) {
-            return res.status(404).json({
-                success: false,
-                message: "Can't find any appointment!"
-            })
-        }
-
-        res.json({
-            success: true,
-            appointments
-        })
-
-    } catch (error) {
-
-        console.log("Error at getUserAppointments: ", error.message);
-        res.status(400).json({
-            success: false,
-            message: error.message
-        })
-
-    }
-}
-
-const getDoctorAppointments = async (req, res) => {
-
-    try {
-
-        const { doctorId } = req.body;
-
-        const ThreeDayInMs = 3 * 24 * 60 * 60 * 1000;
-        const currentDay = Date.now()
-
-        const appointments = await appointmentModel.find({
-            doctorId: doctorId,
-            $or: [
-                { cancelled: false },
-                { cancelledAt: currentDay - ThreeDayInMs }
-            ]
-        })
-
-        if (!appointments) {
-            return res.status(404).json({
-                success: false,
-                message: "Can't find any appointment!"
-            })
-        }
-
-        res.json({
-            success: true,
-            appointments
-        })
-
-    } catch (error) {
-
-        console.log("Error at getDoctorAppointments: ", error.message);
-        res.status(400).json({
-            success: false,
-            message: error.message
-        })
-
-    }
-
-}
-
-
 
 
 const deleteAppointmentAuto = async (req, res) => {

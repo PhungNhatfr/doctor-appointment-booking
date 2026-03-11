@@ -1,21 +1,37 @@
-import React, { useEffect, useState } from "react";
-import { doctors } from "../assets/assets_frontend/assets";
+import React, { useContext, useEffect, useState } from "react";
+import { assets } from "../assets/assets_frontend/assets";
+import { UserContext } from "../context/userContext";
 import DoctorItem from "./DoctorItem";
 import Title from "./Title";
 
 const TopDoctors = () => {
+  
+  const { doctors } = useContext(UserContext);
+  
   const [displayDoctor, setDisplayDoctor] = useState(10);
   const [displayAll, setDisplayAll] = useState(false);
-
-  const topDoctors = doctors.slice(0, displayDoctor);
+  const [displayButton, setDisplayButton] = useState(false);
+  
+  
+  const topDoctors = doctors?.slice(0, displayDoctor) || [];
 
   useEffect(() => {
-    if (displayAll) {
-      setDisplayDoctor(doctors.length);
-    } else {
-      setDisplayDoctor(10);
+    
+    if (doctors && doctors.length > 0) {
+      if (displayAll) {
+        setDisplayDoctor(doctors.length - 1)
+      } else {
+        setDisplayDoctor(doctors.length > 10 ? 10 : doctors.length)
+      }
+      setDisplayButton(doctors.length > 10)      
     }
-  }, [displayAll]);
+  }, [displayAll, doctors]);
+  
+  useEffect(() => {
+    if (doctors.length > 10) {
+      setDisplayButton(false)
+    }
+  }, [doctors])
 
   return (
     <div className="flex flex-col justify-center items-center">
@@ -28,22 +44,22 @@ const TopDoctors = () => {
           <DoctorItem
             _id={doctor._id}
             name={doctor.name}
-            image={doctor.image}
+            image={doctor.image ? doctor.image : assets.upload_area }
             speciality={doctor.speciality}
           />
         ))}
       </div>
 
-      <div
+      {displayButton && <div
         onClick={() => setDisplayAll(!displayAll)}
         className="flex justify-center items-center rounded-3xl bg-gray-200 w-36 h-10 mt-10 cursor-pointer hover:bg-gray-300 transition-all"
       >
-        {!displayAll ? (
+        { (!displayAll ? (
           <p className="text-sm text-gray-600">more</p>
         ) : (
           <p className="text-sm text-gray-600">less</p>
-        )}
-      </div>
+        ))}
+      </div>}
     </div>
   );
 };
