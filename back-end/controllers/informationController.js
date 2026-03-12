@@ -1,6 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
 import userModel from '../models/userModel.js';
 import doctorModel from '../models/doctorModel.js';
+import appointmentModel from "../models/appointmentModel.js";
 import bcrypt from 'bcrypt';
 import validator from 'validator';
 
@@ -72,6 +73,29 @@ const getUser = async (req, res) => {
 
     }
 
+}
+
+const listPatients = async (req, res) => {
+    try {
+        
+        const patients = await appointmentModel.distinct('userId');
+        
+        res.json({
+            success: true,
+            patients
+        })
+        
+        
+        
+    } catch (error) {
+        
+        console.log(error);
+        res.json({
+            success: false,
+            message: "Error !!!"
+        })
+        
+    }
 }
 
 const addDoctor = async (req, res) => {
@@ -301,6 +325,7 @@ const updateDoctor = async (req, res) => {
 export {
     updateUser,
     getUser,
+    listPatients,
     addDoctor,
     deleteDoctor,
     getDoctor,

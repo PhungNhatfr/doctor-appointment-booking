@@ -103,7 +103,7 @@ const getAllAppointments = async (req, res) => {
 
     try {
 
-        const appointments = await appointmentModel.find({}).sort({ date: -1 });
+        const appointments = await appointmentModel.find({cancelled: false, completed: true}).sort({ date: -1 });
 
         res.json({
             success: true,
