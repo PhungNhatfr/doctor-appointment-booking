@@ -11,6 +11,8 @@ const UserContextProvider = (props) => {
     const [userData, setUserData] = useState("");
     const [doctors, setDoctors] = useState([]);
     const [doctorData, setDoctorData] = useState();
+    const [relatedDoctor, setRelatedDoctor] = useState([]);
+    
 
     const getToken = (token) => {
         if (!token && localStorage.getItem('token')) {
@@ -49,6 +51,7 @@ const UserContextProvider = (props) => {
             const { data } = await axios.post(backendUrl + '/api/information/single-doctor', { doctorId });
             if (data.success) {
                 setDoctorData(data.doctor); 
+                setRelatedDoctor(getRelatedDoctor(data.doctor, doctors))
             } else {
                 toast.error("Can't Find This Doctor", { autoClose: 1000 })
             }
@@ -56,6 +59,21 @@ const UserContextProvider = (props) => {
             console.log(error);
         }
 
+    }
+    
+    const getRelatedDoctor = (doctorData, doctors) => {
+        
+        const relatedDoctors = doctors?.filter(doctor => doctor.speciality === doctorData.speciality && doctor._id !== doctorData._id);
+        
+        if (relatedDoctors.length > 5) {
+            return relatedDoctors.splice(0,5)
+        }
+        
+        if (relatedDoctors) {
+            return relatedDoctors
+        }
+        
+        return []
     }
 
 
@@ -89,12 +107,17 @@ const UserContextProvider = (props) => {
 
         }
     }, [token])
+    
+    useEffect(() => {
+        console.log("Related Doctor: ", relatedDoctor);
+    }, [doctorData])
 
 
     const value = {
         token, setToken, backendUrl,
         userData, setUserData, getUserData,
         listDoctor, doctors, setDoctors, doctorData, setDoctorData,
+        relatedDoctor, setRelatedDoctor, getRelatedDoctor,
         handleSubmitAppointment,
         getDoctorById,
     }
