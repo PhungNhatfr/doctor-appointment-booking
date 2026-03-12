@@ -128,15 +128,19 @@ const getUserAppointments = async (req, res) => {
         const { userId } = req.body;
 
         const ThreeDayInMs = 3 * 24 * 60 * 60 * 1000;
-        const currentDay = Date.now()
+        const currentDay = new Date();
+        currentDay.setHours(0, 0, 0, 0);
 
         const appointments = await appointmentModel.find({
             userId: userId,
             $or: [
                 { cancelled: false },
-                { cancelledAt: currentDay - ThreeDayInMs }
+                {
+                    cancelled: true,
+                    cancelledAt: { $gte: new Date(currentDay - ThreeDayInMs) }
+                }
             ]
-        })
+        }).sort({ splotDate: -1 });
 
         if (!appointments) {
             return res.status(404).json({
@@ -231,7 +235,7 @@ const processCancellation = async (appointmentId, res) => {
 
         doctorData.markModified('schedule_booked');
         await doctorData.save();
-    }
+    } 
 
     await doctorModel.findByIdAndUpdate(doctorId, { schedule_booked });
 
@@ -279,7 +283,6 @@ const cancelAppointmentUser = async (req, res) => {
             success: false,
             message: error.message
         })
-
     }
 }
 

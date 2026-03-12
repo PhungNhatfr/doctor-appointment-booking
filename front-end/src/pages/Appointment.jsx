@@ -62,12 +62,7 @@ const Appointment = () => {
    getDoctorById(doctorId)
   }, [doctorId]);
 
-  useEffect(() => {
-    console.log(JSON.parse(doctorData?.schedule || "{}"));
-    console.log("Selected Day:", selectedDay);
-    console.log("Selected Time: ", selectedTime);
-    console.log("Booked: ", doctorData?.schedule_booked)
-  });
+
 
   return doctorData ? (
     <div className="mt-10 mb-20">

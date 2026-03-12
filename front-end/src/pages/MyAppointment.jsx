@@ -1,29 +1,22 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { doctors } from "../assets/assets_frontend/assets";
 import AppointmentItem from "../components/AppointmentItem";
+import { UserContext } from "../context/userContext";
 
 const MyAppointment = () => {
-  const exampleAppointment = [
-    {
-      doctorInfo: doctors[0],
-      appointmentExist: false,
-      date: "25, July, 2024",
-      time: "8:30 PM",
-    },
-    {
-      doctorInfo: doctors[0],
-      
-      appointmentExist: true,
-      date: "25, July, 2024",
-      time: "8:30 PM",
-    },
-    {
-      doctorInfo: doctors[0],
-      appointmentExist: true,
-      date: "25, July, 2024",
-      time: "8:30 PM",
-    },
-  ];
+  const { appointments, setAppointments, getUserAppointments, handleCancelAppointment, token } =
+    useContext(UserContext);
+
+  const deformatSplotDate = (dateString) => {
+    const [day, month, year] = dateString.split("_").map(Number);
+
+    return new Date(year, month - 1, day);
+  };
+
+
+  useEffect(() => {
+    console.log("Appointment: ", appointments);
+  }, [appointments]);
 
   return (
     <div className="mt-10 mb-10">
@@ -32,20 +25,26 @@ const MyAppointment = () => {
       </p>
 
       <div className="flex flex-col gap-2">
-        {exampleAppointment.map((appointment) => (
-          <div>
+        {appointments.map((appointment) => {
+          
+          const deformatDate = deformatSplotDate(appointment.splotDate);
+          
+          return (<div>
             <AppointmentItem
-              name={appointment.doctorInfo.name}
-              speciality={appointment.doctorInfo.speciality}
-              addressLine1={appointment.doctorInfo.address.line1}
-              addressLine2={appointment.doctorInfo.address.line2}
-              date={appointment.date}
-              time={appointment.time}
-              appointmentExist={appointment.appointmentExist}
-              image={appointment.doctorInfo.image}
+              token={token}
+              appointmentId = {appointment._id}
+              name={appointment.doctorData.name}
+              speciality={appointment.doctorData.speciality}
+              addressLine1={appointment.doctorData.address1}
+              addressLine2={appointment.doctorData.address2}
+              date={deformatDate.toDateString()}
+              time={appointment.splotTime}
+              cancelled={appointment.cancelled}
+              completed={appointment.completed}
+              image={appointment.doctorData.image}
             />
-          </div>
-        ))}
+          </div>)
+        })}
       </div>
     </div>
   );

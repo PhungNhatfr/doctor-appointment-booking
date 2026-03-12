@@ -12,6 +12,7 @@ const UserContextProvider = (props) => {
     const [doctors, setDoctors] = useState([]);
     const [doctorData, setDoctorData] = useState();
     const [relatedDoctor, setRelatedDoctor] = useState([]);
+    const [appointments, setAppointments] = useState([]);
     
 
     const getToken = (token) => {
@@ -95,6 +96,37 @@ const UserContextProvider = (props) => {
         }
 
     }
+    
+    const getUserAppointment = async (token) => {
+    
+        try {
+            const { data } = await axios.post(backendUrl + '/api/appointment/get-user-appointments', {}, { headers: { token } })
+            if (data.success) {
+                setAppointments(data.appointments);
+            } else {
+                toast.error(data.message, {autoClose: 1000})
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    
+    const handleCancelAppointment = async (token, appointmentId) => {
+    
+       try {
+        
+           const {data} = await axios.post(backendUrl + '/api/appointment/cancel-appointment-user', {appointmentId}, { headers: {token}})
+           if (data.success) {
+               toast.success(data.message, { autoClose: 1000 })
+               getUserAppointment(token)
+           } else {
+            toast.error(data.message, {autoClose: 1000})
+           }
+       } catch (error) {
+           console.log(error);
+       }
+    
+    }
 
     useEffect(() => {
         getToken(token)
@@ -104,20 +136,18 @@ const UserContextProvider = (props) => {
     useEffect(() => {
         if (token) {
             getUserData(token)
-
+            getUserAppointment(token)
         }
     }, [token])
     
-    useEffect(() => {
-        console.log("Related Doctor: ", relatedDoctor);
-    }, [doctorData])
-
 
     const value = {
         token, setToken, backendUrl,
         userData, setUserData, getUserData,
         listDoctor, doctors, setDoctors, doctorData, setDoctorData,
         relatedDoctor, setRelatedDoctor, getRelatedDoctor,
+        appointments, setAppointments, getUserAppointment,
+        handleCancelAppointment,
         handleSubmitAppointment,
         getDoctorById,
     }
